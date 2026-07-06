@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f6f9fc;
+  --foreground: #10263f;
 }
 
 @theme inline {
@@ -10,17 +10,33 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* LandStrong Counseling brand palette: soft blue, navy, white */
+  --color-navy: #10263f;
+  --color-navy-soft: #1c3a5e;
+  --color-blue: #4c86b8;
+  --color-blue-soft: #7fa8cc;
+  --color-mist: #eaf2f8;
+  --color-mist-deep: #d7e7f3;
+  --color-cream: #fbfdff;
+
+  --color-success: #2f7a53;
+  --color-success-bg: #e6f4ec;
+  --color-warning: #a3690f;
+  --color-warning-bg: #fdf1de;
+  --color-danger: #b83b3b;
+  --color-danger-bg: #fbeaea;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer base {
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.01em;
+  }
 }
