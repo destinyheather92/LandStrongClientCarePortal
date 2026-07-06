@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Show, UserButton } from "@clerk/nextjs";
 import { buttonVariants } from "@/components/ui/button";
 import { isClerkConfigured } from "@/lib/config";
@@ -27,9 +28,14 @@ export async function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-navy/10 bg-white/85 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link href="/" className="flex items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-navy text-sm font-semibold text-white">
-            LS
-          </span>
+          <Image
+            src="/CMYK_LS_icon.png"
+            alt="LandStrong"
+            width={1669}
+            height={1387}
+            className="h-9 w-auto"
+            priority
+          />
           <span className="leading-tight">
             <span className="block text-sm font-semibold text-navy">
               LandStrong Counseling

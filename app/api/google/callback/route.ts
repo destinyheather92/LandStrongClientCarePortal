@@ -14,9 +14,9 @@ function escapeHtml(value: string): string {
 function htmlPage(title: string, body: string, status = 200): NextResponse {
   return new NextResponse(
     `<!doctype html><html><head><meta charset="utf-8"><title>${title}</title>
-      <style>body{font-family:system-ui,sans-serif;max-width:640px;margin:80px auto;padding:0 24px;color:#10263f;line-height:1.6}
-      h1{font-size:1.4rem} pre{background:#eaf2f8;padding:16px;border-radius:12px;overflow:auto;font-size:.85rem}
-      a{color:#4c86b8}</style></head><body>${body}</body></html>`,
+      <style>body{font-family:system-ui,sans-serif;max-width:640px;margin:80px auto;padding:0 24px;color:#4a5464;line-height:1.6}
+      h1{font-size:1.4rem} pre{background:#eef2f9;padding:16px;border-radius:12px;overflow:auto;font-size:.85rem}
+      a{color:#508dc8}</style></head><body>${body}</body></html>`,
     { status, headers: { "Content-Type": "text/html; charset=utf-8" } }
   );
 }

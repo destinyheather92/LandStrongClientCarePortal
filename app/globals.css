@@ -2,7 +2,7 @@
 
 :root {
   --background: #f6f9fc;
-  --foreground: #10263f;
+  --foreground: #4a5464;
 }
 
 @theme inline {
@@ -11,14 +11,16 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-  /* LandStrong Counseling brand palette: soft blue, navy, white */
-  --color-navy: #10263f;
-  --color-navy-soft: #1c3a5e;
-  --color-blue: #4c86b8;
-  --color-blue-soft: #7fa8cc;
-  --color-mist: #eaf2f8;
-  --color-mist-deep: #d7e7f3;
-  --color-cream: #fbfdff;
+  /* LandStrong brand palette */
+  --color-navy: #4a5464;
+  --color-navy-soft: #40539f;
+  --color-blue: #508dc8;
+  --color-blue-soft: #7081bf;
+  --color-blue-deep: #456d9f;
+  --color-slate: #929495;
+  --color-mist: color-mix(in srgb, #508dc8 12%, white);
+  --color-mist-deep: color-mix(in srgb, #508dc8 22%, white);
+  --color-cream: #ffffff;
 
   --color-success: #2f7a53;
   --color-success-bg: #e6f4ec;

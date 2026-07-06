@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
@@ -6,7 +7,16 @@ export function Hero() {
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-mist via-cream to-background">
       <div className="mx-auto max-w-5xl px-6 py-24 text-center">
-        <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-xs font-medium text-navy/60 shadow-sm shadow-navy/5">
+        <Image
+          src="/CMYK_LS_stacked.png"
+          alt="LandStrong"
+          width={1703}
+          height={916}
+          className="mx-auto h-auto w-40 sm:w-48"
+          priority
+        />
+
+        <span className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-xs font-medium text-navy/60 shadow-sm shadow-navy/5">
           <Sparkles className="h-3.5 w-3.5 text-blue" />
           Demo MVP for LandStrong Counseling
         </span>
