@@ -94,6 +94,7 @@ let appointments: Appointment[] = [
         timing: "Immediately",
         status: "sent",
         timestamp: isoDaysAgo(2),
+        hoursBefore: 0,
       },
       {
         id: "rem_e1_2",
@@ -102,6 +103,7 @@ let appointments: Appointment[] = [
         timing: "24 hours before session",
         status: "scheduled",
         timestamp: null,
+        hoursBefore: 24,
       },
       {
         id: "rem_e1_3",
@@ -110,6 +112,7 @@ let appointments: Appointment[] = [
         timing: "1 hour before session",
         status: "scheduled",
         timestamp: null,
+        hoursBefore: 1,
       },
     ],
     createdAt: isoDaysAgo(2),
@@ -134,6 +137,7 @@ let appointments: Appointment[] = [
         timing: "Immediately",
         status: "sent",
         timestamp: isoDaysAgo(19),
+        hoursBefore: 0,
       },
       {
         id: "rem_m1_2",
@@ -142,6 +146,7 @@ let appointments: Appointment[] = [
         timing: "24 hours before session",
         status: "sent",
         timestamp: isoDaysAgo(11),
+        hoursBefore: 24,
       },
       {
         id: "rem_m1_3",
@@ -150,6 +155,7 @@ let appointments: Appointment[] = [
         timing: "1 hour before session",
         status: "sent",
         timestamp: isoDaysAgo(10),
+        hoursBefore: 1,
       },
     ],
     createdAt: isoDaysAgo(19),
@@ -174,6 +180,7 @@ let appointments: Appointment[] = [
         timing: "Immediately",
         status: "sent",
         timestamp: isoDaysAgo(9),
+        hoursBefore: 0,
       },
       {
         id: "rem_s1_2",
@@ -182,6 +189,7 @@ let appointments: Appointment[] = [
         timing: "24 hours before session",
         status: "sent",
         timestamp: isoDaysAgo(0),
+        hoursBefore: 24,
       },
       {
         id: "rem_s1_3",
@@ -190,6 +198,7 @@ let appointments: Appointment[] = [
         timing: "1 hour before session",
         status: "scheduled",
         timestamp: null,
+        hoursBefore: 1,
       },
     ],
     createdAt: isoDaysAgo(9),
@@ -360,6 +369,7 @@ function buildAppointmentReminders(hoursBeforeList: number[]): ReminderEvent[] {
     timing: "Immediately",
     status: "sent",
     timestamp: new Date().toISOString(),
+    hoursBefore: 0,
   };
 
   const scheduled = [...hoursBeforeList]
@@ -376,10 +386,51 @@ function buildAppointmentReminders(hoursBeforeList: number[]): ReminderEvent[] {
         timing: `${amount} ${unit}${plural} before session`,
         status: "scheduled" as const,
         timestamp: null,
+        hoursBefore: hours,
       };
     });
 
   return [confirmation, ...scheduled];
+}
+
+/** Combines an appointment's date + time fields into a single local Date. */
+function appointmentDateTime(appointment: Appointment): Date {
+  const [year, month, day] = appointment.date.split("-").map(Number);
+  const [hour, minute] = appointment.time.split(":").map(Number);
+  return new Date(year, month - 1, day, hour, minute);
+}
+
+export interface DueReminder {
+  appointment: Appointment;
+  reminder: ReminderEvent;
+  client: ClientIntake;
+}
+
+/**
+ * Finds every "scheduled" email reminder whose send time (appointment time
+ * minus hoursBefore) has arrived, for appointments that are still confirmed.
+ * SMS-channel reminders are excluded — no SMS provider is wired up yet.
+ */
+export function getDueReminders(now: Date = new Date()): DueReminder[] {
+  const due: DueReminder[] = [];
+
+  for (const appointment of appointments) {
+    if (appointment.status !== "confirmed") continue;
+    const sessionStart = appointmentDateTime(appointment);
+
+    for (const reminder of appointment.reminders) {
+      if (reminder.status !== "scheduled" || reminder.channel !== "email") continue;
+      const sendAt = new Date(sessionStart.getTime() - reminder.hoursBefore * 60 * 60 * 1000);
+      if (sendAt > now) continue;
+
+      const client = getIntake(appointment.clientId);
+      if (!client) continue;
+
+      due.push({ appointment, reminder, client });
+    }
+  }
+
+  return due;
 }
 
 export interface CreateAppointmentInput {

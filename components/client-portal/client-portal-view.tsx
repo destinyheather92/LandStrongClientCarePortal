@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CalendarCheck, ExternalLink, ShieldAlert, Video } from "lucide-react";
+import { CalendarCheck, ExternalLink, NotebookText, ShieldAlert, Video } from "lucide-react";
 import { ClientRecord, TherapistSettings } from "@/lib/types";
 import { Card, CardBody, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -36,14 +36,18 @@ export function ClientPortalView({
     (a) => a.status === "confirmed" && a.date >= new Date().toISOString().slice(0, 10)
   );
   const latestInvoice = client.invoices[0];
+  const approvedNote = client.note?.status === "approved" ? client.note : null;
+  const noteAppointment = approvedNote
+    ? client.appointments.find((a) => a.id === approvedNote.appointmentId)
+    : undefined;
 
   return (
     <div className="space-y-6">
       <DemoBanner>
         Your therapist may draft session notes with AI assistance. Every
         draft is reviewed and approved by {settings.displayName} before it
-        becomes part of your record — it is never shared with you
-        automatically.
+        becomes part of your record — drafts are never visible to you, only
+        notes your therapist has approved.
       </DemoBanner>
 
       <Card>
@@ -158,6 +162,32 @@ export function ClientPortalView({
           </div>
         </CardBody>
       </Card>
+
+      {approvedNote && (
+        <Card>
+          <CardBody className="space-y-3">
+            <div className="flex items-center justify-between">
+              <CardTitle>Session Notes</CardTitle>
+              <Badge tone="success">Approved</Badge>
+            </div>
+            {noteAppointment && (
+              <p className="text-xs uppercase tracking-wide text-navy/40">
+                {formatDateTimeLabel(noteAppointment.date, noteAppointment.time)}
+              </p>
+            )}
+            <p className="whitespace-pre-line text-sm leading-relaxed text-navy/70">
+              {approvedNote.aiDraft}
+            </p>
+            {approvedNote.approvedAt && (
+              <p className="flex items-center gap-1.5 border-t border-navy/10 pt-3 text-xs text-navy/40">
+                <NotebookText className="h-3.5 w-3.5" />
+                Approved by {approvedNote.approvedBy} on{" "}
+                {formatDateLong(approvedNote.approvedAt.slice(0, 10))}
+              </p>
+            )}
+          </CardBody>
+        </Card>
+      )}
 
       <div className="flex items-start gap-2 rounded-xl bg-mist/60 px-4 py-3 text-xs text-navy/50">
         <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-blue" />

@@ -28,6 +28,8 @@ export interface ReminderEvent {
   timing: string;
   status: "sent" | "scheduled";
   timestamp: string | null;
+  /** Hours before the session this reminder should fire; 0 for immediate/confirmation events. */
+  hoursBefore: number;
 }
 
 export interface Appointment {
